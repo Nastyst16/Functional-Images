@@ -49,7 +49,7 @@ type Transformation = Point -> Point
     False
 -}
 inside :: Point -> Region -> Bool
-inside = undefined
+inside = flip ($)
 
 {-
     *** TODO ***
@@ -75,7 +75,9 @@ inside = undefined
     False
 -}
 fromPoints :: [Point] -> Region
-fromPoints = undefined
+-- fromPoints pointList point = point `elem` pointList
+-- variant point-free
+fromPoints = flip elem
 
 {-
     *** TODO ***
@@ -96,7 +98,7 @@ fromPoints = undefined
     > rectangle 2 2 (1, -1)
     True
 
-    > rectangle 2 2 (2, 2)  
+    > rectangle 2 2 (2, 2)
     False
 -}
 rectangle :: Float -> Float -> Region
@@ -115,10 +117,10 @@ rectangle width height = undefined
 
     > circle 1 (1, 0)
     True
-    
+
     > circle 1 (0, 1)
     True
-    
+
     > circle 1 (1, 1)
     False
 -}
@@ -165,7 +167,7 @@ circle radius = undefined
     '*' pe orizontală și pe verticală poate fi înțeleasă dacă vă gândiți
     la coordonatele vizate, -1, 0 și 1, în toate combinațiile (x, y).
 
-    > printPlot 2 2 $ circle 2     
+    > printPlot 2 2 $ circle 2
     ..*..
     .***.
     *****
@@ -304,7 +306,7 @@ scaling factor = undefined
     ..***
     ...*.
 
-    > printPlot 2 2 $ applyTransformation (scaling 0.5) (circle 2)    
+    > printPlot 2 2 $ applyTransformation (scaling 0.5) (circle 2)
     .....
     ..*..
     .***.
