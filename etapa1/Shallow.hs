@@ -175,7 +175,6 @@ circle radius = \(x, y) -> x^2 + y^2 <= radius^2
     ..*..
 -}
 plot :: Int -> Int -> Region -> String
--- plot width height region = intercalate "\n" [concat [if inside (fromIntegral x, fromIntegral y) region then "*" else "." | y <- [height, height - 1..(-height)], x <- [-width..width]]]
 plot width height region =
     concat [if inside (fromIntegral x, fromIntegral y) region then if x == width && y /= -height then "*\n" else "*" else if x == width && y /= -height then ".\n" else "." | y <- [height, height - 1..(-height)], x <- [-width..width]]
 
@@ -210,10 +209,10 @@ printPlot width height region = putStrLn $ plot width height region
     5.0
 -}
 promoteUnary :: (a -> b) -> Pointed a -> Pointed b
-promoteUnary = undefined
+promoteUnary = (.)
 
 promoteBinary :: (a -> b -> c) -> Pointed a -> Pointed b -> Pointed c
-promoteBinary f pointed1 pointed2 point = undefined
+promoteBinary f pointed1 pointed2 point = f (pointed1 point) (pointed2 point)
 
 {-
     *** TODO ***
@@ -248,13 +247,15 @@ promoteBinary f pointed1 pointed2 point = undefined
     .....
 -}
 complement :: Region -> Region
-complement = undefined
+complement = promoteUnary not
 
 union :: Region -> Region -> Region
-union = undefined
+union = promoteBinary (||)
 
 intersection :: Region -> Region -> Region
-intersection = undefined
+intersection = promoteBinary (&&)
+
+
 
 {-
     *** TODO ***
@@ -274,7 +275,7 @@ intersection = undefined
     (0.0,0.0)
 -}
 translation :: Float -> Float -> Transformation
-translation tx ty = undefined
+translation tx ty = \(x, y) -> (x - tx, y - ty)
 
 {-
     *** TODO ***
@@ -289,7 +290,9 @@ translation tx ty = undefined
     (1.0,1.0)
 -}
 scaling :: Float -> Transformation
-scaling factor = undefined
+scaling factor = \(x, y) -> (x / factor, y / factor)
+
+
 
 {-
     *** TODO ***
