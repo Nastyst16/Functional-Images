@@ -102,7 +102,7 @@ fromPoints = flip elem
     False
 -}
 rectangle :: Float -> Float -> Region
-rectangle width height = undefined
+rectangle width height = \(x, y) -> abs x <= width / 2 && abs y <= height / 2
 
 {-
     *** TODO ***
@@ -125,7 +125,7 @@ rectangle width height = undefined
     False
 -}
 circle :: Float -> Region
-circle radius = undefined
+circle radius = \(x, y) -> x^2 + y^2 <= radius^2
 
 {-
     *** TODO ***
@@ -175,7 +175,9 @@ circle radius = undefined
     ..*..
 -}
 plot :: Int -> Int -> Region -> String
-plot width height region = undefined
+-- plot width height region = intercalate "\n" [concat [if inside (fromIntegral x, fromIntegral y) region then "*" else "." | y <- [height, height - 1..(-height)], x <- [-width..width]]]
+plot width height region =
+    concat [if inside (fromIntegral x, fromIntegral y) region then if x == width && y /= -height then "*\n" else "*" else if x == width && y /= -height then ".\n" else "." | y <- [height, height - 1..(-height)], x <- [-width..width]]
 
 {-
     Utilizați această funcție pentru vizualizarea diagramelor,
