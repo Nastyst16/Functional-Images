@@ -431,16 +431,12 @@ infiniteCircles = union (circle 2)
     a extinde implementarea de mai sus.
 -}
 bfs :: (Ord a) => a -> (a -> [a]) -> [(a, Int)]
-bfs start expand = bfs' [(start, 0)] S.empty
+bfs start expand = bfs' [] [(start, 0)]
   where
-    bfs' [] _ = []
-    bfs' ((state, dist):queue) visited
-      | S.member state visited = bfs' queue visited
-      | otherwise =
-          let visited' = S.insert state visited
-              neighbors = expand state
-              queue' = queue ++ map (\s -> (s, dist + 1)) neighbors
-          in (state, dist) : bfs' queue' visited'
+    bfs' _ [] = []
+    bfs' vizitat ((state, level) : restGraf)
+      | elem state vizitat = bfs' vizitat restGraf
+      | otherwise = (state, level) : bfs' (state:vizitat) (restGraf ++ [(y, level + 1) | y <- expand state])
 
 {-
     *** TODO BONUS ***
