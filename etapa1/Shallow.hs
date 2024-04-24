@@ -319,7 +319,7 @@ scaling factor = \(x, y) -> (x / factor, y / factor)
     .....
 -}
 applyTransformation :: Transformation -> Region -> Region
-applyTransformation = undefined
+applyTransformation = flip (.)
 
 {-
     *** TODO ***
@@ -347,7 +347,7 @@ applyTransformation = undefined
         applyTransformation (scaling 0.5) (circle 2)
 -}
 combineTransformations :: [Transformation] -> Transformation
-combineTransformations = undefined
+combineTransformations = foldl (flip (.)) id
 
 {-
     *** TODO ***
