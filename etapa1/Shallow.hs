@@ -431,7 +431,16 @@ infiniteCircles = union (circle 2)
     a extinde implementarea de mai sus.
 -}
 bfs :: (Ord a) => a -> (a -> [a]) -> [(a, Int)]
-bfs start expand = undefined
+bfs start expand = bfs' [(start, 0)] S.empty
+  where
+    bfs' [] _ = []
+    bfs' ((state, dist):queue) visited
+      | S.member state visited = bfs' queue visited
+      | otherwise =
+          let visited' = S.insert state visited
+              neighbors = expand state
+              queue' = queue ++ map (\s -> (s, dist + 1)) neighbors
+          in (state, dist) : bfs' queue' visited'
 
 {-
     *** TODO BONUS ***
@@ -462,4 +471,6 @@ bfs start expand = undefined
     .........................................
 -}
 regionAvoidingBfs :: Point -> Region -> [(Point, Int)]
-regionAvoidingBfs start region = undefined
+regionAvoidingBfs start region = bfs start (expand region)
+  where
+    expand region (x, y) = filter (not . flip inside region) [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
