@@ -176,7 +176,14 @@ circle radius = \(x, y) -> x^2 + y^2 <= radius^2
 -}
 plot :: Int -> Int -> Region -> String
 plot width height region =
-    concat [if inside (fromIntegral x, fromIntegral y) region then if x == width && y /= -height then "*\n" else "*" else if x == width && y /= -height then ".\n" else "." | y <- [height, height - 1..(-height)], x <- [-width..width]]
+    concat [if inside (fromIntegral x, fromIntegral y) region
+                then if x == width && y /= -height
+                    then "*\n"
+                    else "*"
+                    else if x == width && y /= -height
+                        then ".\n"
+                        else "."
+                        | y <- [height, height - 1..(-height)], x <- [-width..width]]
 
 {-
     Utilizați această funcție pentru vizualizarea diagramelor,
@@ -293,7 +300,6 @@ scaling :: Float -> Transformation
 scaling factor = \(x, y) -> (x / factor, y / factor)
 
 
-
 {-
     *** TODO ***
 
@@ -376,7 +382,8 @@ combineTransformations = foldl (flip (.)) id
     ...............*.....*.....*...
     ...............................
 
-    Răspuns: ...............
+    Răspuns: Este utila evaluarea lenesa, deoarece functia circles genereaza regiunea doar pana cand este nevoie,
+             adica pana cand gasim punctul dorit. Odata gasit ne oprim -> eficienta maxima.
 -}
 circles :: Int -> Region
 circles n
@@ -391,7 +398,10 @@ circles n
     Explicați la prezentare cum se comportă reuniunea infinită de mai jos
     când se verifică apartenența unui punct care NU aparține regiunii.
 
-    Răspuns: ...............
+    Răspuns: Avand in vedere ca functia "infiniteCircles" creeaza cercuri la infinit,
+             in momentul in care dorim verificarea apartenentei a unui punct care NU apartine regiunii
+             functia de verificare va rula la infinit, la fel si cea de creeare a cercurilor.
+
 -}
 infiniteCircles :: Region
 infiniteCircles = union (circle 2)
